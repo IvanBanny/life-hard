@@ -1,0 +1,37 @@
+body {
+    background-color: #121212; /* Off-black background */
+    color: #ffffff; /* White text for contrast */
+    font-family: Arial, sans-serif;
+}
+
+form {
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #1e1e1e; /* Slightly lighter off-black for the form */
+    border-radius: 8px;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(9, 46, 2, 0.897);
+}
+
+label, input, button {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+input {
+    background-color: rgb(254, 254, 254);
+}
+
+button {
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #444444;
+}

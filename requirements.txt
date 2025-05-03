@@ -1,2 +1,0 @@
-bunq-sdk
-flask

@@ -1,0 +1,17 @@
+@@ def list_savings_pots():
+     return Savings.list().value
+
++### 5.1 Debugging the API Response
++
++def debug_list_pots():
++    """Fetch once, print raw pot objects, then exit."""
++    pots = list_savings_pots()
++    print("Retrieved pots:", len(pots))
++    for i, pot in enumerate(pots, start=1):
++        print(f"\n--- Pot #{i} repr ---")
++        print(repr(pot))
++
++if __name__ == "__main__":
++    # DEBUG MODE: inspect API return values
++    debug_list_pots()
++    # return  # exit immediately; comment out to run main()

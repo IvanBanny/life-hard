@@ -12,7 +12,7 @@ from config import API_CONTEXT_FILE
 # Configuration
 # ———————————————
 MINIMUM_TRIGGER_BALANCE = 100.0    # Only trigger LLM if savings ≥ €100
-POLL_INTERVAL_SECONDS  = 60       # Check every minute
+POLL_INTERVAL_SECONDS  = 30       # Check every minute
 
 # ———————————————
 # Logging & Initialization

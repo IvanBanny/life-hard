@@ -1,6 +1,7 @@
 In order to run the program
-1. Create a new sandbox user using the postman.
-2. Get the api_key and keep it safe
-3. Update the api-key in the .env file
-4. Go the directory and run python init_context.py
-5. Then run python app.py
+- `pip install -r "requirements.txt"`
+- Create a new sandbox user using the postman.
+- Get the api_key and keep it safe
+- Update the api-key in the .env file
+- Go the directory and run python init_context.py
+-  Then run python app.py

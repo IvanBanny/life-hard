@@ -11,12 +11,17 @@ def generate_itinerary():
         return jsonify({"error": "Form data not found"}), 400
     
     try:
-        balance = get_budget()
-        prompt = f"I have {balance} for traveling. I want to travel to {session['form_data']['country']} in the dates of {session['form_data']['dates']}. Please create an itinerary."
-        response = generate_response(prompt)
-        if response:
-            return jsonify({"response": response})
-        else:
-            return jsonify({"error": "Failed to generate itinerary"}), 500
+        if getattr(session, "changed", False) or session.get("response") is None:
+            session.changed = False  # Reset the changed flag
+            prompt = f"I have {session['budget']} for traveling. I want to travel to {session['form_data']['country']} in the dates of {session['form_data']['dates']}. Please create a very very very short itinerary."
+            response = generate_response(prompt)
+
+            if response:
+                session["response"] = response  # Cache the response in the session
+            else:
+                return jsonify({"error": "Failed to generate itinerary"}), 500
+        
+        return jsonify({"response": session["response"]}), 200
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500

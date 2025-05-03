@@ -1,13 +1,16 @@
 # Life-Hard: Travel Budget Automation
 
-A smart travel planning application that integrates with Bunq's banking API to help you plan trips within your budget. The app monitors your savings account balance and automatically generates travel itineraries using AI when your savings reach the minimum threshold.
+A smart travel planning application that integrates with Bunq's banking API to help you plan trips within your budget. The app monitors your savings account balance and automatically generates travel itineraries using AI when your savings reach the minimum threshold. 
+
+## Idea
+When we looked at the Bunq mobile app, we didn't find a lot of options under the travel section. This gave us the idea to create an AI-agent. We choose to create a travel pot for users that will allow them to go on trips with their savings. Using the Monetary Bank object and the Savings Bank object, we achieved this. The motivation behind this was that each time an user makes a contribution to their tavel pot aka savings, we will ask them where they want to travel and for how many days and where they are currently situated. Based on that our LLM gives a curated itinerary with detailed day wise activity split. It also gives a forecasted amount of expenditure and some travelling tips. 
+
+Overall, it was a lot of fun. We aim to integrate it with the Bunq mobile app and also perform sentimental analysis to provided more curated results to our users.
 
 ## Features
 
 - **Automated Budget Monitoring**: Tracks your Bunq savings pot balance in real-time
 - **AI-Powered Itinerary Generation**: Uses local LLM (Gemma3) to create personalized travel plans
-- **Web Interface**: Simple form to input travel preferences
-- **Smart Savings Top-up**: Automatically transfers funds to maintain minimum travel budget
 
 ## Architecture
 

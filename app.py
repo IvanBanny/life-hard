@@ -2,10 +2,12 @@
 
 import time
 import logging
+#from flask import Flask, render_template
 from bunq.sdk.context.api_context import ApiContext
 from bunq.sdk.context.bunq_context import BunqContext
 import bunq.sdk.model.generated.endpoint as endpoint
 import requests
+#from multiprocessing import Process
 from config import API_CONTEXT_FILE
 
 # ———————————————
@@ -13,6 +15,9 @@ from config import API_CONTEXT_FILE
 # ———————————————
 MINIMUM_TRIGGER_BALANCE = 100.0    # Only trigger LLM if savings ≥ €100
 POLL_INTERVAL_SECONDS  = 30       # Check every minute
+#app = Flask(__name__, static_folder="static", static_url_path="")
+# app.secret_key = os.environ.get("FLASK_SECRET_KEY", "default_secret_key")
+#app.secret_key = "dasfasgsdfgdfsaafdadfadsfdadsfsa"
 
 # ———————————————
 # Logging & Initialization
@@ -41,8 +46,8 @@ PaymentCls = find_cls("Payment")
 # ———————————————
 # LLM Call (local Ollama/Phi)
 # ———————————————
-def generate_itinerary(balance: str) -> str:
-    prompt = f"I have {balance} for traveling. Create a detailed 3-day itinerary."
+def generate_itinerary(balance: str, country: str, nofdays: str, fromsource: str) -> str:
+    prompt = f"I have {balance} for traveling. I want to travel to {country} from {fromsource} for {nofdays} days. Create a detailed itinerary."
     try:
         resp = requests.post(
             "http://localhost:11434/api/generate",
@@ -109,11 +114,47 @@ def list_savings_pots():
     """Return list of all savings pot objects."""
     return SavingsCls.list().value
 
+#from flask import Response
+
+# @app.route("/stream_itinerary")
+# def stream_itinerary():
+#     """
+#     Streams a new itinerary each time the savings pot crosses the threshold
+#     or its balance changes. Clients can connect and receive updates live.
+#     """
+#     def event_stream():
+#         last_balance = None
+#         while True:
+#             # reuse your helper to get pot_id and current balance
+#             pot_id, balance = ensure_travel_pot(min_balance=MINIMUM_TRIGGER_BALANCE)
+#             if balance >= MINIMUM_TRIGGER_BALANCE and balance != last_balance:
+#                 itinerary = generate_itinerary(balance)
+#                 last_balance = balance
+#                 # SSE frame
+#                 yield f"data: {itinerary}\n\n"
+#             time.sleep(POLL_INTERVAL_SECONDS)
+
+#     return Response(event_stream(), mimetype="text/event-stream")
+
+# def run_flask():
+#     # no lambdas or locals—just a top‑level function
+#     app.run(host="0.0.0.0", port=5008, debug=True)
+
 # ———————————————
 # Main Loop
 # ———————————————
+# @app.route("/")
+# def index():
+#     return render_template("form.html")
+
+
 def main():
-    # 1) Ensure Travel Pot exists & has at least MINIMUM_TRIGGER_BALANCE
+    # # use kwargs to pass named args
+    # p1 = Process(target=run_flask)
+    # p1.start()
+
+    # print('testdsts')
+    # # 1) Ensure Travel Pot exists & has at least MINIMUM_TRIGGER_BALANCE
     pot_id, last_balance = ensure_travel_pot()
 
     # 2) Poll forever
@@ -131,11 +172,19 @@ def main():
         # Trigger if changed and >= threshold
         if new_balance != last_balance and new_balance >= MINIMUM_TRIGGER_BALANCE:
             logger.info(f"Balance changed! {last_balance:.2f} → {new_balance:.2f} EUR")
-            itinerary = generate_itinerary(f"{new_balance:.2f} EUR")
+            country=input("Enter destination/city: ")
+            nodays=input("Enter number of days: ")
+            fromsource = input("Enter source country/city: ")
+            print(f"Generating itinerary for {country} from {fromsource} for {nodays} days with a budget of €{new_balance:.2f} ...")
+            #stream_itinerary()
+            itinerary = generate_itinerary(f"{new_balance:.2f} EUR", country=country, nofdays=nodays, fromsource=fromsource)
             logger.info("🗺  Generated Itinerary:\n" + itinerary)
             last_balance = new_balance
         else:
             logger.debug(f"No trigger (balance: €{new_balance:.2f})")
+    
+    
+    #p1.join()
 
 if __name__ == "__main__":
     main()
